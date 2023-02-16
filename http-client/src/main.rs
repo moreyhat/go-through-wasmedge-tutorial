@@ -1,0 +1,21 @@
+use wasmedge_http_req::request;
+
+fn main() {
+    let mut writer = Vec::new();
+    let res = request::get("http://127.0.0.1:1234/get", &mut writer).unwrap();
+
+    println!("GET");
+    println!("Status: {} {}", res.status_code(), res.reason());
+    println!("Headers {}", res.headers());
+    println!("{}", String::from_utf8_lossy(&writer));
+
+    let mut writer = Vec::new();
+    const BODY: &[u8; 27] = b"field1=value1&field2=value2";
+
+    let res = request::post("http://127.0.0.1:1234/post", BODY, &mut writer).unwrap();
+
+    println!("POST");
+    println!("Status: {} {}", res.status_code(), res.reason());
+    println!("Headers {}", res.headers());
+    println!("{}", String::from_utf8_lossy(&writer));
+}
